@@ -1,0 +1,20 @@
+﻿<Window x:Class="SNAKEWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SNAKEWPF"
+        mc:Ignorable="d"
+        Title="Snake" Height="400" Width="500" KeyDown="Window_KeyDown">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Canvas Name="mycanvas" Background="Black"></Canvas>
+        <Canvas Grid.Column="1">
+            <Image x:Name="myImage" Width="158" Height="125" Canvas.Top="201"/>
+            <TextBlock Name="txtbScore" Canvas.Left="20" Canvas.Top="50">0</TextBlock>
+        </Canvas>
+    </Grid>
+</Window>
