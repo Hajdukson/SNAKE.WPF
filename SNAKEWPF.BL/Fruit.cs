@@ -17,8 +17,8 @@ namespace SNAKEWPF.BL
         public Fruit()
         {
             var rd = new Random();
-            var x = rd.Next(0, 37) * 10;
-            var y = rd.Next(0, 35) * 10;
+            var x = (rd.Next(0, 37) * 10) + 1;
+            var y = (rd.Next(0, 35) * 10) + 1;
 
             Circle.Width = Circle.Height = 10;
             Circle.Fill = Brushes.Blue;

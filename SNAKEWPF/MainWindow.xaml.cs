@@ -32,6 +32,7 @@ namespace SNAKEWPF
         Snake _snake;
         Fruit _fruit;
         DispatcherTimer _time;
+        int _score = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -44,10 +45,29 @@ namespace SNAKEWPF
         private void Time_Tick(object sender, EventArgs e)
         {
             _snake.Move();
-
             SetSnakeInCanvas();
-            myCanvas.Children.RemoveAt(1);
+            Debug.WriteLine($"Snake : {_snake.Tail[0].X} {_snake.Tail[0].Y}");
+            Debug.WriteLine($"Fruit : {_fruit.FruitCoordinate.X} {_fruit.FruitCoordinate.Y}");
+            Debug.WriteLine($"Tail : {_snake.Tail.Count}");
 
+            if (_snake.Tail[0].X == _fruit.FruitCoordinate.X && _snake.Tail[0].Y == _fruit.FruitCoordinate.Y)
+            {
+                _snake.Tail.Add(new Coordinate(_snake.Tail[0].X, _snake.Tail[0].Y));
+                myCanvas.Children.RemoveAt(0);
+                _fruit = new Fruit();
+                SetFruitInCanvas();
+            }
+
+            var lenghtToRemove = 0;
+            for (int i = 0; i < myCanvas.Children.Count; i++)
+            {
+                if (myCanvas.Children[i] is Rectangle)
+                    lenghtToRemove++;
+            }
+            lenghtToRemove -= _snake.Tail.Count;
+            myCanvas.Children.RemoveRange(1, lenghtToRemove);
+
+            lenghtToRemove = 0;
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -79,16 +99,8 @@ namespace SNAKEWPF
         }
         private void SetSnakeInCanvas()
         {
-            Rectangle newRectangle = new Rectangle
-            {
-                Height = 10,
-                Width = 10,
-                Fill = Brushes.Red
-            };
-
-            Canvas.SetLeft(newRectangle, _snake.Tail[0].X);
-            Canvas.SetTop(newRectangle, _snake.Tail[0].Y);
-            myCanvas.Children.Add(newRectangle);
+            _snake.DrawSnakeHead();
+            myCanvas.Children.Add(_snake.Rec);
         }
         private ImageSource RandomImageSource()
         {

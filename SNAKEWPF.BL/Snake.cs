@@ -16,7 +16,18 @@ namespace SNAKEWPF.BL
             new Coordinate(1,1)
         };
         public Direction Direction { get; set; } = Direction.Right;
-
+        public Rectangle Rec{ get; private set;}
+        public void DrawSnakeHead()
+        {
+            Rec = new Rectangle
+            {
+                Height = 10,
+                Width = 10,
+                Fill = Brushes.Red
+            };
+            Canvas.SetLeft(Rec, Tail[0].X);
+            Canvas.SetTop(Rec, Tail[0].Y);
+        }
         public void Move()
         {
             switch (Direction)
