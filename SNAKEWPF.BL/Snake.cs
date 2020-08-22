@@ -11,12 +11,13 @@ namespace SNAKEWPF.BL
 {
     public class Snake
     {
-        public List<Coordinate> Tail { get; set; } = new List<Coordinate>
-        {
-            new Coordinate(1,1)
-        };
+        public Coordinate Position { get; set; } = new Coordinate(1, 1);
+        public List<Coordinate> Tail { get; set; } = new List<Coordinate>();
+
         public Direction Direction { get; set; } = Direction.Right;
         public Rectangle Rec{ get; private set;}
+        public int Lenght { get; set; } = 1;
+
         public void DrawSnakeHead()
         {
             Rec = new Rectangle
@@ -25,28 +26,36 @@ namespace SNAKEWPF.BL
                 Width = 10,
                 Fill = Brushes.Red
             };
-            Canvas.SetLeft(Rec, Tail[0].X);
-            Canvas.SetTop(Rec, Tail[0].Y);
+            Canvas.SetLeft(Rec, Position.X);
+            Canvas.SetTop(Rec, Position.Y);
+        }
+        public void TailLogic()
+        {
+            Tail.Add(new Coordinate(Position.X, Position.Y));
+            if(Lenght < Tail.Count)
+            {
+                var endTail = Tail.First();
+                Tail.Remove(endTail);
+            }
         }
         public void Move()
         {
             switch (Direction)
             {
                 case Direction.Left:
-                    Tail[0].X -= 10;
+                    Position.X -= 10;
                     break;
                 case Direction.Right:
-                    Tail[0].X += 10;
+                    Position.X += 10;
                     break;
                 case Direction.Up:
-                    Tail[0].Y -= 10;
+                    Position.Y -= 10;
                     break;
                 case Direction.Down:
-                    Tail[0].Y += 10;
+                    Position.Y += 10;
                     break;
             }
         }
     }
     public enum Direction { Left, Right, Up, Down }
-
 }

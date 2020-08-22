@@ -32,7 +32,7 @@ namespace SNAKEWPF
         Snake _snake;
         Fruit _fruit;
         DispatcherTimer _time;
-        int _score = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -46,17 +46,23 @@ namespace SNAKEWPF
         {
             _snake.Move();
             SetSnakeInCanvas();
-            Debug.WriteLine($"Snake : {_snake.Tail[0].X} {_snake.Tail[0].Y}");
-            Debug.WriteLine($"Fruit : {_fruit.FruitCoordinate.X} {_fruit.FruitCoordinate.Y}");
-            Debug.WriteLine($"Tail : {_snake.Tail.Count}");
+            //Debug.WriteLine($"Snake : {_snake.HeadPosition.X} {_snake.HeadPosition.Y}");
+            //Debug.WriteLine($"Tail : {_snake.Tail.Count}");
 
-            if (_snake.Tail[0].X == _fruit.FruitCoordinate.X && _snake.Tail[0].Y == _fruit.FruitCoordinate.Y)
+            if (_snake.Position.X == _fruit.FruitCoordinate.X && _snake.Position.Y == _fruit.FruitCoordinate.Y)
             {
-                _snake.Tail.Add(new Coordinate(_snake.Tail[0].X, _snake.Tail[0].Y));
+                Debug.WriteLine($"Fruit : {_fruit.FruitCoordinate.X} {_fruit.FruitCoordinate.Y}");
+                _snake.Lenght++;
                 myCanvas.Children.RemoveAt(0);
                 _fruit = new Fruit();
                 SetFruitInCanvas();
             }
+            
+            //for(int i = 2; i < myCanvas.Children.Count; i++)
+            //{
+            //    if (myCanvas.Children[1] == myCanvas.Children[i])
+            //        Close();
+            //}
 
             var lenghtToRemove = 0;
             for (int i = 0; i < myCanvas.Children.Count; i++)
@@ -68,6 +74,19 @@ namespace SNAKEWPF
             myCanvas.Children.RemoveRange(1, lenghtToRemove);
 
             lenghtToRemove = 0;
+
+            _snake.TailLogic();
+
+            Debug.WriteLine($" Head {_snake.Tail[0].X}  {_snake.Tail[0].Y}");
+            Debug.WriteLine($" Head {_snake.Position.X}  {_snake.Position.Y}");
+            for (int i = 1; i < _snake.Tail.Count; i++)
+            {
+                Debug.WriteLine($"Tail {i}: {_snake.Tail[i].X}  {_snake.Tail[i].Y}");
+                if (_snake.Tail[0].X == _snake.Tail[i].X && _snake.Tail[0].Y == _snake.Tail[i].Y)
+                {
+                    Close();
+                }
+            }
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
