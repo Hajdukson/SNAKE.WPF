@@ -29,63 +29,50 @@ namespace SNAKEWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        Snake _snake;
-        Fruit _fruit;
-        DispatcherTimer _time;
+        Snake _snake = new Snake();
+        Fruit _fruit = new Fruit();
+        DispatcherTimer _time = new DispatcherTimer();
 
         public MainWindow()
         {
             InitializeComponent();
-            _fruit = new Fruit();
-            _snake = new Snake();
-            _time = new DispatcherTimer();
-            _time.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            snakeImage.Source = RandomImageSource();
             _time.Tick += Time_Tick;
         }
         private void Time_Tick(object sender, EventArgs e)
         {
-            _snake.Move();
             SetSnakeInCanvas();
-            //Debug.WriteLine($"Snake : {_snake.HeadPosition.X} {_snake.HeadPosition.Y}");
-            //Debug.WriteLine($"Tail : {_snake.Tail.Count}");
+            _snake.Move();
+
+            txtScore.Text = (_snake.Lenght - 1).ToString();
+
+            _snake.TailLogic();
 
             if (_snake.Position.X == _fruit.FruitCoordinate.X && _snake.Position.Y == _fruit.FruitCoordinate.Y)
             {
-                Debug.WriteLine($"Fruit : {_fruit.FruitCoordinate.X} {_fruit.FruitCoordinate.Y}");
                 _snake.Lenght++;
                 myCanvas.Children.RemoveAt(0);
                 _fruit = new Fruit();
                 SetFruitInCanvas();
+                snakeImage.Source = RandomImageSource();
             }
-            
-            //for(int i = 2; i < myCanvas.Children.Count; i++)
-            //{
-            //    if (myCanvas.Children[1] == myCanvas.Children[i])
-            //        Close();
-            //}
 
-            var lenghtToRemove = 0;
+            var lengthToRemove = 0;
             for (int i = 0; i < myCanvas.Children.Count; i++)
             {
                 if (myCanvas.Children[i] is Rectangle)
-                    lenghtToRemove++;
+                    lengthToRemove++;
             }
-            lenghtToRemove -= _snake.Tail.Count;
-            myCanvas.Children.RemoveRange(1, lenghtToRemove);
+            lengthToRemove -= _snake.Tail.Count;
+            myCanvas.Children.RemoveRange(1, lengthToRemove);
 
-            lenghtToRemove = 0;
-
-            _snake.TailLogic();
-
-            Debug.WriteLine($" Head {_snake.Tail[0].X}  {_snake.Tail[0].Y}");
-            Debug.WriteLine($" Head {_snake.Position.X}  {_snake.Position.Y}");
-            for (int i = 1; i < _snake.Tail.Count; i++)
+            if(GameOver())
             {
-                Debug.WriteLine($"Tail {i}: {_snake.Tail[i].X}  {_snake.Tail[i].Y}");
-                if (_snake.Tail[0].X == _snake.Tail[i].X && _snake.Tail[0].Y == _snake.Tail[i].Y)
-                {
-                    Close();
-                }
+                _snake.Lenght = 1;
+                _snake.Tail.Clear();
+                _snake.Position.X = _snake.Position.Y = 0;
+                _snake.Tail.Add(_snake.Position);
+                _snake.Direction = Direction.Right;
             }
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -108,9 +95,10 @@ namespace SNAKEWPF
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            _time.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            _time.Start();
             SetSnakeInCanvas();
             SetFruitInCanvas();
-            _time.Start();
         }
         private void SetFruitInCanvas()
         {
@@ -120,6 +108,14 @@ namespace SNAKEWPF
         {
             _snake.DrawSnakeHead();
             myCanvas.Children.Add(_snake.Rec);
+        }
+        private bool GameOver()
+        {
+
+            if (_snake.Position.X > 380 || _snake.Position.Y > 350 || _snake.Position.X < 0 || _snake.Position.Y < 0)
+                return true;
+
+            return _snake.Tail.Where(c => c.X == _snake.Position.X && c.Y == _snake.Position.Y).ToList().Count > 1;
         }
         private ImageSource RandomImageSource()
         {

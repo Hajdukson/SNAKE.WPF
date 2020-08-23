@@ -5,11 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SNAKEWPF"
         mc:Ignorable="d"
-        Title="Snake" Height="400" Width="500" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
+        Title="Snake" Height="400" Width="600" KeyDown="Window_KeyDown" Loaded="Window_Loaded">
     <Grid>
 
-        <Canvas Name="myCanvas" Background="Black">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
 
-        </Canvas>
+        <Canvas Name="myCanvas" Background="Black"/>
+        <StackPanel Grid.Column="1">
+            <StackPanel Width="Auto" Height="Auto" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,60,0,0">
+                <TextBlock Text="Score: " Height="Auto"/>
+                <TextBlock x:Name="txtScore" Text="0" />
+                
+            </StackPanel>
+            <Image x:Name="snakeImage" Width="150" Height="150" Margin="0,70"/>
+        </StackPanel>
+
     </Grid>
 </Window>

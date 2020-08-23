@@ -11,9 +11,8 @@ namespace SNAKEWPF.BL
 {
     public class Snake
     {
-        public Coordinate Position { get; set; } = new Coordinate(1, 1);
-        public List<Coordinate> Tail { get; set; } = new List<Coordinate>();
-
+        public Coordinate Position { get; private set; } = new Coordinate();
+        public List<Coordinate> Tail { get; private set; } = new List<Coordinate>();
         public Direction Direction { get; set; } = Direction.Right;
         public Rectangle Rec{ get; private set;}
         public int Lenght { get; set; } = 1;
